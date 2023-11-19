@@ -1,0 +1,26 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=Test@123!
+    volumes:
+      - /var/run/postgresql:/var/run/postgresql
+    ports:
+      - 5432:5432
+    restart: always
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - STRIPE_SINGLE_PAYMENT_DEMO_DATABASE_PASSWORD=Test@123!
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/rails
+      - /var/run/postgresql:/var/run/postgresql
+    restart: always
+    depends_on:
+      - db
